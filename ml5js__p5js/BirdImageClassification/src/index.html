@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="./images/favicon.ico" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+        <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+        <title>Bird Image Classification with ml5.js and p5.js</title>
+    </head>
+    <body>
+        <h1>Bird Image Classification with MobileNet and ml5.js</h1>
+        <div id="container1" style="margin-bottom: 2rem;">
+            <div id="result1" style="margin-bottom: 1rem;">Scanning...</div>
+        </div>
+        <div id="container2" style="margin-bottom: 2rem;">
+            <div id="result2" style="margin-bottom: 1rem;">Scanning...</div>
+        </div>
+
+        <script type="text/javascript">
+            function doMLMagic(idImage, idResult) {
+                // Initialize Image Classifier with MobileNet.
+                const classifier = ml5.imageClassifier("MobileNet");
+                classifier.classify(document.getElementById(idImage), gotResult);
+    
+                // Function to run when results arrive
+                function gotResult(error, results) {
+                    const element = document.getElementById(idResult);
+                    if (error)
+                        element.innerHTML = error;
+                    else {
+                        let num = results[0].confidence * 100;
+                        element.innerHTML = results[0].label + "<br />Confidence: " + num.toFixed(2) + "%";
+                    }
+                }
+            };
+
+            function loadImage(imageId, path, containerId, resultId) {
+                // Add image to img-tag manually otherwise going into cross origin problem
+                let img = document.createElement("img");
+                img.id = imageId;
+                img.src = path;
+                img.crossOrigin = "Anonymous";
+                img.style.width = "100%";
+                img.onload = function() {
+                    let src = document.getElementById(containerId);
+                    src.appendChild(img);
+    
+                    // Scanning image
+                    doMLMagic(imageId, resultId);
+                };
+            }
+
+            loadImage("image1", "./images/birdPic1.jpg", "container1", "result1");
+            loadImage("image2", "./images/birdPic2.jpg", "container2", "result2");
+            </script>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "birdimageclassification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start-server": "http-server ./src --port 5700 --proxy http://localhost:5700?"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
